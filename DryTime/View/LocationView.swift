@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct LocationView: View {
-    @State var locationManager: LocationManager = .init()
+    @ObservedObject var locationManager: LocationManager = .init()
     @State var navigationTag: String?
 
     var body: some View {
@@ -54,17 +54,16 @@ struct LocationView: View {
         .padding(.vertical, 10)
     }
 
-    @ViewBuilder
     private var contentView: some View {
-        if let places = locationManager.fetchedPlaces, !places.isEmpty {
-            List {
-                ForEach(places, id: \.self) { place in
+        Group {
+            if let places = locationManager.fetchedPlaces, !places.isEmpty {
+                List(places, id: \.self) { place in
                     locationButton(for: place)
                 }
+                .listStyle(.plain)
+            } else {
+                liveLocationButton
             }
-            .listStyle(.plain)
-        } else {
-            liveLocationButton
         }
     }
 
@@ -96,23 +95,21 @@ struct LocationView: View {
     }
 
     private var liveLocationButton: some View {
-        Button {
-            if let coordinate = locationManager.userLocation?.coordinate {
-                locationManager.mapView.region = .init(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-                locationManager.addDraggablePin(coordinate: coordinate)
-                locationManager.updatePlacemark(location: .init(latitude: coordinate.latitude, longitude: coordinate.longitude))
-                navigationTag = "MAPVIEW"
-            }
-        } label: {
-            Label {
-                Text("Use Current Location")
-                    .font(.callout)
-            } icon: {
-                Image(systemName: "location.north.circle.fill")
-            }
-            .foregroundColor(.green)
+        Button(action: handleLiveLocationButtonTapped) {
+            Label("Use Current Location", systemImage: "location.north.circle.fill")
+                .foregroundColor(.green)
+                .font(.callout)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func handleLiveLocationButtonTapped() {
+        guard let coordinate = locationManager.userLocation?.coordinate else { return }
+        
+        locationManager.mapView.region = .init(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        locationManager.addDraggablePin(coordinate: coordinate)
+        locationManager.updatePlacemark(location: .init(latitude: coordinate.latitude, longitude: coordinate.longitude))
+        navigationTag = "MAPVIEW"
     }
 }
 

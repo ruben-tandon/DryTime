@@ -41,31 +41,31 @@ class LocationManager: NSObject, ObservableObject, MKMapViewDelegate, CLLocation
         cancellable = $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .removeDuplicates()
-            .sink(receiveValue: { value in
+            .sink { [weak self] value in
+                guard let self = self else { return }
                 if value != "" {
                     self.fetchPlaces(value: value)
                 } else {
-                    self.fetchedPlaces = nil
+                    DispatchQueue.main.async {
+                        self.fetchedPlaces = nil
+                    }
                 }
-            })
+            }
     }
     
-    func fetchPlaces(value: String){
-        //Fetching places using MKLocalSearch
+    func fetchPlaces(value: String) {
         Task {
             do {
                 let request = MKLocalSearch.Request()
                 request.naturalLanguageQuery = value.lowercased()
-                
                 let response = try await MKLocalSearch(request: request).start()
-                //We can also use Mainactor to publish changes in Main Thread
-                await MainActor.run(body: {
-                    self.fetchedPlaces = response.mapItems.compactMap({ item -> CLPlacemark? in
-                        return item.placemark
-                    })
-                })
+                await MainActor.run {
+                    self.fetchedPlaces = response.mapItems.compactMap { $0.placemark }
+                }
             } catch {
-                //Handle errors
+                await MainActor.run {
+                    self.fetchedPlaces = nil
+                }
             }
         }
     }
