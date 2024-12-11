@@ -98,7 +98,7 @@ class LocationManager: NSObject, ObservableObject, MKMapViewDelegate, CLLocation
     func addDraggablePin(coordinate: CLLocationCoordinate2D) {
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
-        annotation.title = "Drying clothes"
+        annotation.title = "Drying clothes location"
         
         mapView.addAnnotation(annotation)
     }
