@@ -11,6 +11,7 @@ import MapKit
 struct LocationView: View {
     @ObservedObject var locationManager: LocationManager = .init()
     @State var navigationTag: String?
+    @Binding var location: String
 
     var body: some View {
         VStack {
@@ -22,7 +23,7 @@ struct LocationView: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .background {
             NavigationLink(tag: "MAPVIEW", selection: $navigationTag) {
-                MapViewSelection()
+                MapViewSelection(location: $location)
                     .environmentObject(locationManager)
             } label: {
                 EmptyView()
@@ -115,6 +116,7 @@ struct LocationView: View {
 
 struct MapViewSelection: View {
     @EnvironmentObject var locationManager: LocationManager
+    @Binding var location: String
     var body: some View {
         ZStack {
             MapViewHelper()
@@ -144,7 +146,7 @@ struct MapViewSelection: View {
                     .padding(.vertical, 10)
                     
                     Button {
-                        // Add confirm action here
+                        location = place.locality ?? "Select Location"
                     } label: {
                         Text("Confirm location")
                             .fontWeight(.semibold)
@@ -190,5 +192,5 @@ struct MapViewHelper: UIViewRepresentable {
 }
 
 #Preview {
-    LocationView()
+    LocationView(location: .constant("Location"))
 }

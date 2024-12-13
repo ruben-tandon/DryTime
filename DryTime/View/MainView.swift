@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MainView: View {
     
-    var location: String = "Location"
+    @State var location: String = "Select Location"
     
     var body: some View {
         NavigationStack {
             VStack {
-                NavigationLink(destination: LocationView()) {
+                NavigationLink(destination: LocationView(location: $location)) {
                     Text("\(location)")
                         .font(.title)
                 }
