@@ -12,6 +12,8 @@ struct LocationView: View {
     @ObservedObject var locationManager: LocationManager = .init()
     @State var navigationTag: String?
     @Binding var location: String
+    @Binding var navigationPath: [Int]
+    @Binding var indexView: Int
 
     var body: some View {
         VStack {
@@ -23,7 +25,7 @@ struct LocationView: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .background {
             NavigationLink(tag: "MAPVIEW", selection: $navigationTag) {
-                MapViewSelection(location: $location)
+                MapViewSelection(location: $location, navigationPath: $navigationPath)
                     .environmentObject(locationManager)
             } label: {
                 EmptyView()
@@ -117,6 +119,7 @@ struct LocationView: View {
 struct MapViewSelection: View {
     @EnvironmentObject var locationManager: LocationManager
     @Binding var location: String
+    @Binding var navigationPath: [Int]
     var body: some View {
         ZStack {
             MapViewHelper()
@@ -147,6 +150,7 @@ struct MapViewSelection: View {
                     
                     Button {
                         location = place.locality ?? "Select Location"
+                        navigationPath.removeAll()
                     } label: {
                         Text("Confirm location")
                             .fontWeight(.semibold)
@@ -192,5 +196,6 @@ struct MapViewHelper: UIViewRepresentable {
 }
 
 #Preview {
-    LocationView(location: .constant("Location"))
+    LocationView(location: .constant("Location"), navigationPath: .constant([1]), indexView: .constant(1)
+    ).environmentObject(LocationManager())
 }
