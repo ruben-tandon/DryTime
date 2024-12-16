@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    @State var location: String = "Select Location"
+    @AppStorage("location") private var location: String = "Select Location"
     @State private var navigationPath = [Int]()
     
     var body: some View {
