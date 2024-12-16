@@ -13,7 +13,6 @@ struct LocationView: View {
     @State var navigationTag: String?
     @Binding var location: String
     @Binding var navigationPath: [Int]
-    @Binding var indexView: Int
 
     var body: some View {
         VStack {
@@ -196,6 +195,6 @@ struct MapViewHelper: UIViewRepresentable {
 }
 
 #Preview {
-    LocationView(location: .constant("Location"), navigationPath: .constant([1]), indexView: .constant(1)
+    LocationView(location: .constant("Location"), navigationPath: .constant([1])
     ).environmentObject(LocationManager())
 }

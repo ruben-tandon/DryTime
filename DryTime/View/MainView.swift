@@ -11,22 +11,18 @@ struct MainView: View {
     
     @State var location: String = "Select Location"
     @State private var navigationPath = [Int]()
-    private var locationText: some View {
-        Text("\(location)")
-            .font(.title)
-    }
-    @State private var indexView: Int = 1
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack {
-                NavigationLink(value: indexView) {
-                    locationText
+                NavigationLink(value: 1) {
+                    Text("\(location)")
+                        .font(.title)
                 }
             }
             .padding()
-            .navigationDestination(for: Int.self) { index in
-                LocationView(location: $location, navigationPath: $navigationPath, indexView: $indexView)
+            .navigationDestination(for: Int.self) {_ in
+                LocationView(location: $location, navigationPath: $navigationPath)
             }
         }
     }
