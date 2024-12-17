@@ -8,38 +8,45 @@
 import WeatherKit
 import CoreLocation
 
-class WeatherViewModel: ObservableObject {
+class WeatherManager: ObservableObject {
     @Published private(set) var currentTemperature = String()
     @Published private(set) var currentCondition = String()
     @Published private(set) var dailyHighLow = "H:0 L:0"
     @Published private(set) var hourlyForecast = [HourWeather]()
     @Published private(set) var tenDayForecast = [DayWeather]()
     
-    //Hardcoded
     private let weatherService = WeatherService()
-    private let seattleLocation = CLLocation(latitude: 47.6062, longitude: -122.3321)
+    private var userLocation: CLLocation?
     
-    init() {
-        fetchCurrentWeather ()
+    func updateLocation(latitude: Double, longitude: Double) {
+        self.userLocation = CLLocation(latitude: latitude, longitude: longitude)
+        fetchCurrentWeather()
     }
     
     func fetchCurrentWeather () {
+        guard let location = userLocation else {
+            print("Location not set.")
+            return
+        }
         Task {
             do {
-                let weather = try await weatherService.weather(for: seattleLocation)
+                let weather = try await weatherService.weather(for: location)
                 DispatchQueue.main.async {
                     self.currentTemperature = weather.currentWeather.temperature.formatted()
                     self.currentCondition = weather.currentWeather.condition.description
                     self.dailyHighLow = "H:\(weather.dailyForecast.forecast[0].highTemperature.formatted().dropLast()) L:\(weather.dailyForecast.forecast[0].lowTemperature.formatted().dropLast())"
                     
-                    //Hourly forecast.I
+                    self.hourlyForecast.removeAll()
+                    self.tenDayForecast.removeAll()
+                    
+                    //Hourly forecast
                     weather.hourlyForecast.forecast.forEach {
                         if self.isSameHourOrLater(date1: $0.date, date2: Date()) {
                             self.hourlyForecast.append(HourWeather(time: self.hourFormatter(date: $0.date), symbolName: $0.symbolName, temperature: "\($0.temperature.formatted().dropLast())"))
                         }
                     }
                     
-                    //10 day forecast.
+                    //10 day forecast
                     weather.dailyForecast.forecast.forEach {
                         self.tenDayForecast.append(DayWeather(day: self.dayFormatter(date: $0.date), symbolName: $0.symbolName, lowTemperature: "\($0.lowTemperature.formatted().dropLast())", highTemperature: "\($0.highTemperature.formatted().dropLast())"))
                     }

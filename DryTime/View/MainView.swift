@@ -14,7 +14,7 @@ struct MainView: View {
     @AppStorage("longitude") private var longitude: Double?
     @State private var navigationPath = [Int]()
     
-    @StateObject private var weatherViewModel = WeatherViewModel()
+    @StateObject private var weatherViewModel = WeatherManager()
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -36,6 +36,9 @@ struct MainView: View {
                     
                     if let latitude, let longitude {
                         Text("\(latitude) / \(longitude)")
+                            .onAppear {
+                                weatherViewModel.updateLocation(latitude: latitude, longitude: longitude)
+                            }
                         ScrollView {
                             VStack(alignment: . leading) {
                                 Label("10-day forecast".uppercased(), systemImage: "calendar")
