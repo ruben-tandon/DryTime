@@ -28,23 +28,23 @@ struct MainView: View {
                                 .font(.title)
                                 .padding()
                                 .background(
-                                    .ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8)
+                                    .thinMaterial, in: RoundedRectangle(cornerRadius: 20)
                                 )
                         }
                         .padding(.top)
                     }
                     
                     if let latitude, let longitude {
-                        Text("\(latitude) / \(longitude)")
-                            .onAppear {
-                                weatherViewModel.updateLocation(latitude: latitude, longitude: longitude)
-                            }
-                        ScrollView {
+//                        Text("\(latitude) / \(longitude)")
+                        ScrollView(showsIndicators: false) {
                             VStack(alignment: . leading) {
                                 Label("10-day forecast".uppercased(), systemImage: "calendar")
                                     .font(.caption)
                                     .fontWeight(.bold)
                                     .padding([.top, .leading])
+                                    .onAppear {
+                                        weatherViewModel.updateLocation(latitude: latitude, longitude: longitude)
+                                    }
                                 
                                 VStack {
                                     ForEach (weatherViewModel.tenDayForecast, id: \.self) { weather in
@@ -70,7 +70,7 @@ struct MainView: View {
                                 }
                             }
                             .background(
-                                .ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8)
+                                .thinMaterial, in: RoundedRectangle(cornerRadius: 20)
                             )
                         }
                     } else {
