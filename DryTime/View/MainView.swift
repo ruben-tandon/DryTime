@@ -19,7 +19,7 @@ struct MainView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             ZStack {
-                LinearGradient(gradient: Gradient(colors: [.red.opacity(0.3), .orange.opacity(0.3)]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                LinearGradient(gradient: Gradient(colors: [.blue.opacity(0.7), .orange.opacity(0.7)]), startPoint: .topLeading, endPoint: .bottomTrailing)
                     .ignoresSafeArea()
                 VStack {
                     NavigationLink(value: 1) {
@@ -54,10 +54,6 @@ struct MainView: View {
                                                 .padding(.horizontal)
                                                 .symbolRenderingMode(.multicolor)
                                             
-                                            Text(weather.lowTemperature)
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.gray)
-                                            
                                             ZStack(alignment: .trailing) {
                                                 Capsule()
                                                 LinearGradient(gradient: Gradient(colors:[.blue, .yellow]), startPoint: .leading, endPoint: .trailing)
@@ -65,9 +61,6 @@ struct MainView: View {
                                                     .frame (width: 72)
                                             }
                                             .frame (height: 6)
-                                            
-                                            Text(weather.highTemperature)
-                                                .fontWeight(.semibold)
                                         }
                                         .padding()
                                     }
