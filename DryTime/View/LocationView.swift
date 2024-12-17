@@ -12,6 +12,8 @@ struct LocationView: View {
     @ObservedObject var locationManager: LocationManager = .init()
     @State var navigationTag: String?
     @Binding var location: String
+    @Binding var latitude: Double?
+    @Binding var longitude: Double?
     @Binding var navigationPath: [Int]
 
     var body: some View {
@@ -24,7 +26,7 @@ struct LocationView: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .background {
             NavigationLink(tag: "MAPVIEW", selection: $navigationTag) {
-                MapViewSelection(location: $location, navigationPath: $navigationPath)
+                MapViewSelection(location: $location, latitude: $latitude, longitude: $longitude, navigationPath: $navigationPath)
                     .environmentObject(locationManager)
             } label: {
                 EmptyView()
@@ -118,6 +120,8 @@ struct LocationView: View {
 struct MapViewSelection: View {
     @EnvironmentObject var locationManager: LocationManager
     @Binding var location: String
+    @Binding var latitude: Double?
+    @Binding var longitude: Double?
     @Binding var navigationPath: [Int]
     var body: some View {
         ZStack {
@@ -148,7 +152,9 @@ struct MapViewSelection: View {
                     .padding(.vertical, 10)
                     
                     Button {
-                        location = place.locality ?? "Select Location"
+                        location = place.name ?? "Select Location"
+                        latitude = place.location?.coordinate.latitude
+                        longitude = place.location?.coordinate.longitude
                         navigationPath.removeAll()
                     } label: {
                         Text("Confirm location")
@@ -195,6 +201,6 @@ struct MapViewHelper: UIViewRepresentable {
 }
 
 #Preview {
-    LocationView(location: .constant("Location"), navigationPath: .constant([1])
+    LocationView(location: .constant("Location"), latitude: .constant(0.0), longitude: .constant(0.0), navigationPath: .constant([1])
     ).environmentObject(LocationManager())
 }
