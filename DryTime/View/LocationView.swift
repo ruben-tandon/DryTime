@@ -25,13 +25,16 @@ struct LocationView: View {
         .padding()
         .frame(maxHeight: .infinity, alignment: .top)
         .background {
-            NavigationLink(tag: "MAPVIEW", selection: $navigationTag) {
-                MapViewSelection(location: $location, latitude: $latitude, longitude: $longitude, navigationPath: $navigationPath)
-                    .environmentObject(locationManager)
-            } label: {
-                EmptyView()
-                    .accessibilityHidden(true)
+            ZStack {
+                NavigationLink(tag: "MAPVIEW", selection: $navigationTag) {
+                    MapViewSelection(location: $location, latitude: $latitude, longitude: $longitude, navigationPath: $navigationPath)
+                        .environmentObject(locationManager)
+                } label: {
+                    EmptyView()
+                        .accessibilityHidden(true)
+                }
             }
+            .accessibilityHidden(true)
         }
     }
     
