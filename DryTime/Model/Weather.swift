@@ -18,6 +18,37 @@ class WeatherManager: ObservableObject {
     private let weatherService = WeatherService()
     private var userLocation: CLLocation?
     
+    private let symbolDescriptions: [String: String] = [
+        "sun.max": "Sunny",
+        "cloud.rain": "Rainy",
+        "cloud.sun": "Partly Cloudy",
+        "snow": "Snowy",
+        "cloud.bolt": "Thunderstorms",
+        "wind": "Windy",
+        "cloud.fog": "Foggy",
+        "cloud": "Cloudy",
+        "cloud.drizzle": "Drizzle"
+    ]
+
+    func symbolDescription(for symbolName: String) -> String {
+        return symbolDescriptions[symbolName] ?? "Unknown weather condition"
+    }
+    
+    private let dayDescriptions: [String: String] = [
+        "Today": "Today",
+        "Mon": "Monday",
+        "Tue": "Tuesday",
+        "Wed": "Wednesday",
+        "Thu": "Thursday",
+        "Fri": "Friday",
+        "Sat": "Saturday",
+        "Sun": "Sunday"
+    ]
+    
+    func dayDescription(for day: String) -> String {
+        return dayDescriptions[day] ?? "Unknown day"
+    }
+    
     func updateLocation(latitude: Double, longitude: Double) {
         self.userLocation = CLLocation(latitude: latitude, longitude: longitude)
         fetchCurrentWeather()

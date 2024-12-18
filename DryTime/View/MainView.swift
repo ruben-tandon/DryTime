@@ -33,6 +33,8 @@ struct MainView: View {
                         }
                         .padding(.top)
                     }
+                    .accessibilityLabel("\(location), this is your selected location.")
+                    .accessibilityHint("Tap to change your location.")
                     
                     if let latitude, let longitude {
 //                        Text("\(latitude) / \(longitude)")
@@ -64,8 +66,11 @@ struct MainView: View {
                                                     .frame (width: 72)
                                             }
                                             .frame (height: 6)
+                                            .accessibilityHidden(true)
                                         }
                                         .padding()
+                                        .accessibilityElement(children: .combine)
+                                        .accessibilityLabel("\(weatherViewModel.dayDescription(for: weather.day)), \(weatherViewModel.symbolDescription(for: weather.symbolName))")
                                     }
                                 }
                             }
@@ -74,7 +79,7 @@ struct MainView: View {
                             )
                         }
                     } else {
-                        Text("No coordinates to display")
+                        Text("Please select a location first")
                     }
                 }
                 .padding()
