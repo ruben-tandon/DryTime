@@ -30,6 +30,7 @@ struct LocationView: View {
                     .environmentObject(locationManager)
             } label: {
                 EmptyView()
+                    .accessibilityHidden(true)
             }
         }
     }
@@ -39,6 +40,7 @@ struct LocationView: View {
             Text("Choose location")
                 .font(.title3)
                 .fontWeight(.semibold)
+                .accessibilityHidden(true)
         }
     }
 
@@ -46,8 +48,11 @@ struct LocationView: View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
+                .accessibilityHidden(true)
             
-            TextField("Find locations here", text: $locationManager.searchText)
+            TextField("Search locations here", text: $locationManager.searchText)
+                .accessibilityHint("This is a text field where you can type to find locations")
+                .submitLabel(.search)
         }
         .padding(.vertical, 12)
         .padding(.horizontal)
@@ -96,6 +101,7 @@ struct LocationView: View {
                 }
             }
         }
+        .accessibilityHint("Double-tap to select this location.")
     }
 
     private var liveLocationButton: some View {
@@ -105,6 +111,8 @@ struct LocationView: View {
                 .font(.callout)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityLabel("Use current location")
+        .accessibilityHint("Double-tap to set your location to the current position.")
     }
 
     private func handleLiveLocationButtonTapped() {
