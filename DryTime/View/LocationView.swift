@@ -139,16 +139,19 @@ struct MapViewSelection: View {
             MapViewHelper()
                 .environmentObject(locationManager)
                 .ignoresSafeArea()
+                .accessibilityHidden(true)
             
             if let place = locationManager.pickedPlaceMark {
                 VStack(spacing: 15) {
                     Text("Confirm location")
                         .font(.title2.bold())
+                        .accessibilityHidden(true)
                     
                     HStack(spacing: 15) {
                         Image(systemName: "mappin.circle.fill")
                             .font(.title2)
                             .foregroundStyle(.gray)
+                            .accessibilityHidden(true)
                         
                         VStack(alignment: .leading, spacing: 6) {
                             Text(place.name ?? "")
@@ -158,6 +161,7 @@ struct MapViewSelection: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
+                        .accessibilityHidden(true)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 10)
@@ -183,6 +187,8 @@ struct MapViewSelection: View {
                             }
                             .foregroundColor(.white)
                     }
+                    .accessibilityLabel("Confirm the selected location \((place.name!))")
+                    .accessibilityHint("Double-tap to confirm and set the location.")
                 }
                 .padding()
                 .background {
