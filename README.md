@@ -1,4 +1,4 @@
-# App de Clima y Selección de Ubicación
+# DryTime (App de Clima y Selección de Ubicación)
 
 Una aplicación que permite a los usuarios buscar ubicaciones y ver el clima actual. Con funcionalidades de accesibilidad mejoradas para usuarios con discapacidad visual.
 
@@ -12,7 +12,7 @@ Una aplicación que permite a los usuarios buscar ubicaciones y ver el clima act
 - **VoiceOver**: Se ha optimizado la app para usuarios de VoiceOver.
   - Descripciones claras y útiles para los elementos interactivos.
   - Botones como "Confirmar ubicación" y "Usar ubicación actual" con descripciones detalladas.
-  - Uso de `accessibilityLabel`, `accessibilityHint`, y `accessibilityAddTraits`.
+  - Uso de `accessibilityLabel` y `accessibilityHint`.
   - Elementos innecesarios se han ocultado con `accessibilityHidden` para mejorar la experiencia.
 
 ## Requisitos:
